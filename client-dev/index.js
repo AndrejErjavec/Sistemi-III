@@ -1,7 +1,7 @@
 const express=require('express')
 require('dotenv').config()
 const app=express()
-const port=5001
+
 
 //Configs
 app.use(express.json())
