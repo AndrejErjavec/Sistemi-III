@@ -1,56 +1,64 @@
-const express = require('express');
+const express=require('express')
+const novice= express.Router()
 
-const novice = express.Router();
+//import db moduel
+const DB=require('../DB/dbConn')
 
-// Get access to db stuff
-const DB = require('../DB/dbConnection')
-
-
-novice.get('/', async (req, res, next) => {
-    try{
-        let queryResult = await DB.allNovice()
+novice.get('/', async (req,res,next)=>{
+    try
+    {
+        let queryResult= await DB.allNovice()
         res.json(queryResult)
     }
-    catch(err){
-        console.log(err)
-        res.sendStatus(500)
-    }
-});
-
-novice.get('/:id', async (req,res,next) => {
-    try{
-        let queryResult = await DB.oneNovice(req.params.id)
-        res.json(queryResult)
-    }
-    catch(err){
+    catch(err)
+    {
         console.log(err)
         res.sendStatus(500)
     }
 })
 
-novice.post('/', async (req,res,next)=>{
-    let title = req.body.title
-    let slug = req.body.slug
+novice.get('/:id',async (req,res,next)=>{
+    try
+    {
+        let queryResult= await DB.oneNovica(req.params.id)
+        res.json(queryResult)
+    }
+    catch(err)
+    {
+        console.log(err)
+        res.sendStatus(500)
+    }
+})
+
+
+novice.post('/', async (req,res)=>{
+    let title= req.body.title
+    let slug= req.body.slug
     let text = req.body.text
 
-    let isAcompleteNovica = title && slug && text && text
+    let isAcompleteArticle= title && slug && text
 
-    if (isAcompleteNovica) {
-        try {
-            let queryResult = await DB.createNovice(title,slug,text)
-            if (queryResult.affectedRows) {
-                console.log("New article added!")
+    if(isAcompleteArticle)
+    {
+        try
+        {
+            let queryResult= await DB.createNovica(title,slug,text)
+            if(queryResult.affectedRows)
+            {
+                console.log("New article added")
             }
         }
-        catch(err) {
+        catch(err)
+        {
             console.log(err)
-            res.sendStatus(500)
+            res.sendStatus(500) 
         }
     }
-    else {
-        console.log("A filed is missing!")
+    else
+    {
+        console.log("A field is missing...")
     }
     res.end()
 })
 
-module.exports = novice;
+module.exports=novice
