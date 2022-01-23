@@ -51,23 +51,21 @@ users.post("/register", async (req, res) => {
 	let password = req.body.password;
 	let email = req.body.email;
 
-	let isCompleteUSer = username && password && email;
-
-	if (isCompleteUSer) {
+	let isValidUser = username && password && email && password;
+	if (isValidUser) {
 		try {
 			let queryResult = await DB.AddUser(username, email, password);
 			if (queryResult.affectedRows) {
-				console.log("new user added");
-				res.send("user added");
+				console.log("New user added");
+				res.send("hola");
 			}
-		} catch (err) {
-			console.log(err);
+		} catch (e) {
+			console.log(e);
 			res.sendStatus(500);
 		}
 	} else {
-		console.log("A field is missing");
+		console.log("A field is missing!!");
 	}
-	res.end();
 });
 
 module.exports = users;
